@@ -2,10 +2,366 @@
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celebración de Graduación - Justin Sebastian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <main class="wrapper">
+        
+        <section class="slide" id="portada">
+            <div class="overlay-destello" id="destello"></div>
+            
+            <div class="content">
+                <p class="tagline">CELEBRACIÓN DE</p>
+                <h1 class="titulo-grad">Graduación</h1>
+                <div class="birrete-oro">🎓</div>
+                <h2 class="nombre">Justin Sebastian Pesantes Soto</h2>
+                <p class="colegio-tag">U.E. Fiscal Aida Gallegos de Moncayo</p>
+            </div>
+        </section>
+
+        <section class="slide" id="frase-seccion">
+            <div class="frase-contenedor">
+                <div class="marco-foto-central">
+                    <img src="/images/foto-hermano.png" alt="Justin Sebastian" class="foto-graduado" />
+                </div>
+
+                <div class="texto-con-comillas">
+                    <span class="comilla">“</span>
+                    <p class="frase-texto">
+                        Hoy es un día muy especial porque culmino una etapa de mi vida que he logrado con esfuerzo y el apoyo incondicional de mi familia. Quisiera compartir un momento agradable contigo para celebrar este triunfo.
+                    </p>
+                    <span class="comilla">”</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide" id="detalles">
+            <div class="card-detalles">
+                <h3>Acompáñanos a celebrar</h3>
+                <div class="divisor-dorado"></div>
+                <p class="evento-tipo">Graduación de Bachiller</p>
+                
+                <div class="info-bloque">
+                    <p class="info-linea"><strong>Fecha:</strong> Sábado, 18 de Julio</p>
+                    <p class="info-linea"><strong>Hora:</strong> 16:00 PM</p>
+                </div>
+                
+                <a href="https://maps.app.goo.gl/ddZh9MNks5nxpQXK9" target="_blank" class="btn-maps" rel="noopener noreferrer">
+                    Ver Ubicación
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        import { gsap } from "gsap";
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // --- LINEA DE TIEMPO: PORTADA ---
+            const tlPortada = gsap.timeline();
+            tlPortada.from(".tagline", { opacity: 0, y: -40, duration: 1.2, ease: "power2.out" });
+            tlPortada.from(".titulo-grad", { opacity: 0, scale: 0.8, duration: 1.4, ease: "back.out(1.4)" }, "-=0.7");
+            tlPortada.from(".birrete-oro", { opacity: 0, rotation: -25, scale: 0.4, duration: 0.8, ease: "power2.out" }, "-=0.5");
+            tlPortada.from(".nombre", { opacity: 0, y: 35, duration: 1.2, ease: "power3.out" }, "-=0.5");
+            tlPortada.from(".colegio-tag", { opacity: 0, y: 20, duration: 1.0 }, "-=0.6");
+            tlPortada.to("#destello", { left: "160%", duration: 2.0, ease: "power2.inOut" }, "-=1.5");
+
+            // --- ANIMACIONES CON INTERSECCIÓN (SCROLL) ---
+            const observerOptions = {
+                root: document.querySelector('.wrapper'),
+                threshold: 0.3
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.id === 'frase-seccion') {
+                            // Primero emerge la foto de tu hermano de forma gloriosa
+                            gsap.fromTo(".marco-foto-central", 
+                                { opacity: 0, scale: 0.8, y: 40 },
+                                { opacity: 1, scale: 1, y: 0, duration: 1.4, ease: "back.out(1.2)" }
+                            );
+                            // Luego aparece la dedicatoria deslizándose desde abajo
+                            gsap.fromTo(".frase-texto", 
+                                { opacity: 0, y: 25 },
+                                { opacity: 1, y: 0, duration: 1.2, ease: "power3.out", delay: 0.4 }
+                            );
+                            // Al final aparecen las comillas doradas decorativas
+                            gsap.fromTo(".comilla", 
+                                { opacity: 0, scale: 0 },
+                                { opacity: 0.25, scale: 1, duration: 1.5, ease: "back.out(2)", delay: 0.7 }
+                            );
+                        } else if (entry.target.id === 'detalles') {
+                            gsap.fromTo(".card-detalles", 
+                                { opacity: 0, y: 50, scale: 0.9 },
+                                { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "power3.out" }
+                            );
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.slide').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+    <style>
+        :root {
+            --color-azul-mar: #2b4263;
+            --color-dorado: #c5a059;
+            --fuente-elegante: 'Great Vibes', cursive;
+            --fuente-moderna: 'Montserrat', sans-serif;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body {
+            font-family: var(--fuente-moderna);
+            background-color: #ffffff;
+            color: var(--color-azul-mar);
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrapper {
+            width: 100%;
+            height: 100vh;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            scroll-snap-align: start;
+            
+            background-image: url('/images/fondo-acuarela.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 20px;
+        }
+
+        .content {
+            position: relative;
+            z-index: 3;
+        }
+
+        .overlay-destello {
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(234, 190, 114, 0.35), transparent);
+            transform: skewX(-25deg);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            letter-spacing: 8px;
+            font-weight: 400;
+            color: var(--color-azul-mar);
+            opacity: 0.85;
+        }
+
+        .titulo-grad {
+            font-family: var(--fuente-elegante);
+            font-size: 5.5rem;
+            color: var(--color-azul-mar);
+            font-weight: 400;
+            margin: 5px 0;
+            text-shadow: 0px 2px 4px rgba(255, 255, 255, 0.6);
+        }
+
+        .birrete-oro {
+            font-size: 3.8rem;
+            margin: 15px 0;
+            filter: drop-shadow(0px 4px 8px rgba(197, 160, 89, 0.4));
+        }
+
+        .nombre {
+            font-family: var(--fuente-elegante);
+            font-size: 4rem;
+            color: var(--color-dorado);
+            line-height: 1.2;
+            text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .colegio-tag {
+            font-size: 0.95rem;
+            letter-spacing: 3px;
+            font-weight: 600;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-top: 15px;
+        }
+
+        /* --- DISEÑO COMPUESTO DE LA SECCIÓN DE LA FRASE --- */
+        .frase-contenedor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 25px; /* Separación balanceada entre la foto y la frase */
+            max-width: 600px;
+            width: 100%;
+            z-index: 3;
+        }
+
+        /* Marco vertical tipo carnet para la foto flotante central */
+        .marco-foto-central {
+            width: 180px;
+            height: 230px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 15px 35px rgba(43, 66, 99, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            opacity: 0; /* Lo maneja GSAP */
+        }
+
+        .foto-graduado {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .texto-con-comillas {
+            position: relative;
+            width: 100%;
+            padding: 0 30px;
+        }
+
+        .frase-texto {
+            font-family: var(--fuente-moderna);
+            font-size: 1.25rem;
+            font-weight: 300;
+            line-height: 1.8;
+            color: var(--color-azul-mar);
+            font-style: italic;
+            opacity: 0; /* Lo maneja GSAP */
+        }
+
+        .comilla {
+            font-family: var(--fuente-elegante);
+            font-size: 7rem;
+            color: var(--color-dorado);
+            opacity: 0;
+            position: absolute;
+            line-height: 1;
+            user-select: none;
+        }
+
+        .texto-con-comillas .comilla:first-of-type {
+            top: -30px;
+            left: 0px;
+        }
+
+        .texto-con-comillas .comilla:last-of-type {
+            bottom: -65px;
+            right: 0px;
+        }
+
+        /* --- TARJETA DE DETALLES --- */
+        .card-detalles {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 45px 35px;
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            max-width: 100%;
+            width: 440px;
+            box-shadow: 0 20px 40px rgba(43, 66, 99, 0.08);
+            z-index: 3;
+            opacity: 0;
+        }
+
+        .card-detalles h3 {
+            font-family: var(--fuente-elegante);
+            font-size: 3rem;
+            color: var(--color-azul-mar);
+        }
+
+        .divisor-dorado {
+            width: 70px;
+            height: 2px;
+            background-color: var(--color-dorado);
+            margin: 18px auto;
+        }
+
+        .evento-tipo {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .info-bloque {
+            margin-bottom: 25px;
+        }
+
+        .info-linea {
+            margin-bottom: 14px;
+            font-size: 1.15rem;
+            color: #3b4a5a;
+        }
+
+        .info-linea strong {
+            color: var(--color-azul-mar);
+        }
+
+        /* Botón de Mapas */
+        .btn-maps {
+            display: inline-block;
+            padding: 14px 40px;
+            background-color: var(--color-azul-mar);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            box-shadow: 0 6px 20px rgba(43, 66, 99, 0.25);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-maps:hover {
+            background-color: var(--color-dorado);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(197, 160, 89, 0.35);
+        }
+    </style>
+</body>
+</html>
